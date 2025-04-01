@@ -1,51 +1,177 @@
 <!---
 {
-  "depends_on": [],
+  "depends_on": ["https://github.com/STEMgraph/862f9d0d-6ee1-4746-9988-e7cd0efc1c56"],
   "author": "Stephan Bökelmann",
-  "first_used": "2025-03-17",
-  "keywords": ["learning", "exercises", "education", "practice"]
+  "first_used": "2025-04-01",
+  "keywords": ["shell", "evaluation", "identifiers", "functions"]
 }
 --->
 
-# Learning Through Exercises
+# Evaluating Complex Expressions with the Shell
 
 ## 1) Introduction
-Learning by doing is one of the most effective methods to acquire new knowledge and skills. Rather than passively consuming information, actively engaging in problem-solving fosters deeper understanding and long-term retention. By working through structured exercises, students can grasp complex concepts in a more intuitive and applicable way. This approach is particularly beneficial in technical fields like programming, mathematics, and engineering.
 
-### 1.1) Further Readings and Other Sources
-- [The Importance of Practice in Learning](https://www.sciencedirect.com/science/article/pii/S036013151300062X)
-- "The Art of Learning" by Josh Waitzkin
-- [How to Learn Effectively: 5 Key Strategies](https://www.edutopia.org/article/5-research-backed-learning-strategies)
+In the [Basic Evaluation Challenge](https://github.com/STEMgraph/ac584d6d-1397-49d9-8319-85e9fbd4b765), we learned how to evaluate simple expressions in the shell. This time, we aim to go further by introducing the concept of **identifiers** and showing how they can be used to construct **more complex expressions**.
+
+An **identifier** is a name used to refer to a variable, function, type, or value. Identifiers can be **predefined** or **user-defined**. In the shell, using identifiers allows you to modularize and reuse code, following the software engineering principle of **divide and conquer**.
+
+To evaluate expressions, the shell must interpret a combination of **operators and operands**, which can be reduced to a value — this process is called **evaluation**. When operands are replaced with variables, these expressions often take the form of **functions**.
+
+In this exercise, you will:
+
+- Set and use identifiers in the shell environment
+- Combine them to form more complex expressions
+- Investigate the scope and lifetime of identifiers
+
+Let’s get started by learning how to bind values to identifiers.
 
 ## 2) Tasks
-1. **Write a Summary**: Summarize the concept of "learning by doing" in 3-5 sentences.
-2. **Example Identification**: List three examples from your own experience where learning through exercises helped you understand a topic better.
-3. **Create an Exercise**: Design a simple exercise for a topic of your choice that someone else could use to practice.
-4. **Follow an Exercise**: Find an online tutorial that includes exercises and complete at least two of them.
-5. **Modify an Existing Exercise**: Take a basic problem from a textbook or online course and modify it to make it slightly more challenging.
-6. **Pair Learning**: Explain a concept to a partner and guide them through an exercise without giving direct answers.
-7. **Review Mistakes**: Look at an exercise you've previously completed incorrectly. Identify why the mistake happened and how to prevent it in the future.
-8. **Time Challenge**: Set a timer for 10 minutes and try to solve as many simple exercises as possible on a given topic.
-9. **Self-Assessment**: Create a checklist to evaluate your own performance in completing exercises effectively.
-10. **Reflect on Progress**: Write a short paragraph on how this structured approach to exercises has influenced your learning.
 
-<details>
-  <summary>Tip for Task 5</summary>
-  Try making small adjustments first, such as increasing the difficulty slightly or adding an extra constraint.
-</details>
+1. **Binding and Evaluating Simple Expressions**
+
+    - Open a terminal emulator.
+    - Bind a value to the identifier `x`:
+
+      ```bash
+      x=1
+      echo $x
+      ```
+
+    - Bind a second value to `y` and use `echo` to print it.
+    - Evaluate an expression using:
+
+      ```bash
+      expr $x + $y
+      ```
+
+2. **Binding Functions to Identifiers**
+
+    - Define a simple function:
+
+      ```bash
+      function say_hello() { echo "Hello"; }
+      say_hello
+      ```
+
+    - View the function definition:
+
+      ```bash
+      declare -f say_hello
+      ```
+
+    - Define a multi-line function:
+
+      ```bash
+      function say_multiple_things() {
+        echo "Hello"
+        echo "I"
+        echo "say"
+        echo "multiple"
+        echo "things"
+      }
+      ```
+
+3. **Passing Arguments to Functions**
+
+    - Define a parameterized function:
+
+      ```bash
+      function costs() {
+        cost_of_one_apple=0.2
+        echo $(($1 * $cost_of_one_apple))
+      }
+      ```
+
+    - Test with:
+
+      ```bash
+      costs 1
+      ```
+
+    - Modify the function to take two arguments (quantity and price).
+    - Call the function with existing variables:
+
+      ```bash
+      costs $x $y
+      ```
+
+4. **Storing the Result of Expressions**
+
+    - Store evaluation results in variables:
+
+      ```bash
+      d=$(expr 1 + 1)
+      echo $d
+
+      e=$(expr $x + $y)
+      echo $e
+      ```
+
+    - (Optional/fix) Define a function `sum` and use it:
+
+      ```bash
+      function sum() { echo $(($1 + $2)); }
+      apple_price_tag=$(sum $x $y)
+      echo $apple_price_tag
+      ```
+
+5. **Calling Functions from Other Functions**
+
+    - Define and call functions:
+
+      ```bash
+      function my_hello_function() { echo "Hello $1"; }
+      function call_other_func() { my_hello_function "from another function"; }
+      call_other_func
+      ```
+
+    - Define a third function before the function it calls and observe the behavior:
+
+      ```bash
+      function call_other_func2() { my_hello_function2 "world"; }
+      function my_hello_function2() { echo "Hello $1"; }
+      call_other_func2
+      ```
+
+6. **Local Identifiers and Intermediate Results**
+
+    - Define a function that uses local variables:
+
+      ```bash
+      function squares() {
+        local square1=$(( $1 * $1 ))
+        local square2=$(( $2 * $2 ))
+        echo $(($square1 + $square2))
+      }
+      ```
+
+    - Try accessing `square1` from outside the function — what happens?
+    - Redefine the function without `local` and compare behavior.
+    - Define:
+
+      ```bash
+      function sum_of_squares() { echo $(( $1*$1 + $2*$2 )); }
+      function product_of_squares() { echo $(( $1*$1 * $2*$2 )); }
+      function compare_squares() {
+        sum=$(sum_of_squares $1 $2)
+        prod=$(product_of_squares $1 $2)
+        if [ $sum -gt $prod ]; then echo 1; else echo 0; fi
+      }
+      ```
 
 ## 3) Questions
-1. What are the main benefits of learning through exercises compared to passive learning?
-2. How do exercises improve long-term retention?
-3. Can you think of a subject where learning through exercises might be less effective? Why?
-4. What role does feedback play in learning through exercises?
-5. How can self-designed exercises improve understanding?
-6. Why is it beneficial to review past mistakes in exercises?
-7. How does explaining a concept to someone else reinforce your own understanding?
-8. What strategies can you use to stay motivated when practicing with exercises?
-9. How can timed challenges contribute to learning efficiency?
-10. How do exercises help bridge the gap between theory and practical application?
+
+- What is the output of `echo $x`, `expr $x + $y`, `costs 1`, `echo $square1`?
+- What happens when calling functions defined before or after each other?
+- Why does `local` affect variable visibility?
+- Why are positional parameters like `$1`, `$2` useful in function definitions?
 
 ## 4) Advice
-Practice consistently and seek out diverse exercises that challenge different aspects of a topic. Combine exercises with reflection and feedback to maximize your learning efficiency. Don't hesitate to adapt exercises to fit your own needs and ensure that you're actively engaging with the material, rather than just going through the motions.
+
+- Use `declare -f` to inspect your functions.
+- Use `local` in functions to avoid polluting the global namespace.
+- Remember that arguments in Bash are **positional** — always keep `$1`, `$2`, etc., in mind.
+- Use `$(command)` to evaluate and capture the output of a command into a variable.
+- Shell scripting follows many programming principles — use naming and structure to your advantage.
+- If unsure, echo intermediate values to debug your scripts.
 
