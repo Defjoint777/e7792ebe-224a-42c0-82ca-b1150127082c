@@ -77,7 +77,7 @@ Let’s get started by learning how to bind values to identifiers.
 
       ```bash
       function costs() {
-        cost_of_one_apple=0.2
+        cost_of_one_apple=3
         echo $(($1 * $cost_of_one_apple))
       }
       ```
