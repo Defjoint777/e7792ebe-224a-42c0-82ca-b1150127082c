@@ -81,6 +81,10 @@ Let’s get started by learning how to bind values to identifiers.
         echo $(($1 * $cost_of_one_apple))
       }
       ```
+      function kosten() {
+      einapfel=3
+      echo $(($1 * einapfel))
+      }; kosten 10
 
     - Test with:
 
@@ -94,6 +98,11 @@ Let’s get started by learning how to bind values to identifiers.
       ```bash
       costs $x $y
       ```
+      function kosten() {
+      einapfel=3
+      echo $((($1 + $2) * einapfel));
+      }
+      kosten 3 5
 
 4. **Storing the Result of Expressions**
 
@@ -106,6 +115,10 @@ Let’s get started by learning how to bind values to identifiers.
       e=$(expr $x + $y)
       echo $e
       ```
+        function kosten() {
+      einapfel=3
+      echo summ=$((($1 + $2) * einapfel));
+      }; kosten 3 5; echo $summ
 
     - (Optional/fix) Define a function `sum` and use it:
 
@@ -114,6 +127,11 @@ Let’s get started by learning how to bind values to identifiers.
       apple_price_tag=$(sum $x $y)
       echo $apple_price_tag
       ```
+      function summe() {
+      echo $(($1 + $2));
+      }
+      apfelpreis=$((summe $x $y))
+      echo $apfelpreis // summe 4 5
 
 5. **Calling Functions from Other Functions**
 
@@ -124,6 +142,13 @@ Let’s get started by learning how to bind values to identifiers.
       function call_other_func() { my_hello_function "from another function"; }
       call_other_func
       ```
+function blabla1() {
+echo "ich werde $1";
+}
+function blabla2 () {
+blabla1 "weiter geleitet";
+}
+blabla2
 
     - Define a third function before the function it calls and observe the behavior:
 
@@ -132,7 +157,13 @@ Let’s get started by learning how to bind values to identifiers.
       function my_hello_function2() { echo "Hello $1"; }
       call_other_func2
       ```
-
+function bla() {
+echo "Hello $1";
+}
+function bla2() {
+bla1 "world"
+}
+bla2
 6. **Local Identifiers and Intermediate Results**
 
     - Define a function that uses local variables:
@@ -162,9 +193,16 @@ Let’s get started by learning how to bind values to identifiers.
 ## 3) Questions
 
 - What is the output of `echo $x`, `expr $x + $y`, `costs 1`, `echo $square1`?
+- $x = 1, expr $x + $y = 3, echo $square1 = null, kosten 1 waiting for 2nd argument.
+- 
 - What happens when calling functions defined before or after each other?
+- ?
+- 
 - Why does `local` affect variable visibility?
+- local makes variable visible only in current season.
+- 
 - Why are positional parameters like `$1`, `$2` useful in function definitions?
+- its allows to  save in this variables user defined arguments.
 
 ## 4) Advice
 
